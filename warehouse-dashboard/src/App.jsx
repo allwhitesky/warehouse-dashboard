@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
 import './App.css'
 import SignIn from './components/SignOn'
 import SignUp from './components/SignUp'
@@ -30,7 +32,13 @@ function App() {
   console.log("THIS IS ITEM DATA", data)
   return (
     <>
-      <SignUp />
+      <Auth
+        supabaseClient={supabase}
+        appearance={{ theme: ThemeSupa }}
+        providers={['google', 'facebook', 'twitter']}
+        redirectTo='dashboard'
+      />
+
       {data ? <ItemModal data={data[0]} /> : <></>}
     </>
   )
