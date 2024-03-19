@@ -4,6 +4,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import ItemModal from './components/ItemModal'
 import ItemsTable from './components/ItemsTable'
+import Dashboard from './Dashboard';
 
 
 async function getInfo() {
@@ -23,14 +24,22 @@ async function logout() {
 export default function App() {
   const [session, setSession] = useState(null)
   const [info, setInfo] = useState(null);
+ 
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
+      console.log(
+        'session',
+        session
+      )
+     
+      console.log(
+        'userEmail',
+        session.user.email
+      )
     })
-    console.log(
-      'session',
-      session
-    )
+   
 
     const {
       data: { subscription },
@@ -55,7 +64,7 @@ export default function App() {
   else {
     return (
       <>
-        <h1>Authenticated</h1>
+        <Dashboard />
         <button onClick={logout}>Logout</button>
       </>
     )

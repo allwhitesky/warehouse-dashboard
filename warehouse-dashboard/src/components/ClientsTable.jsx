@@ -7,10 +7,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://rvnfstjxuiwxvyzhlqmt.supabase.co'
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey)
+import { supabase } from '../lib/helper/supabaseClient'
 
 export default function BasicTable() {
   const [loading, setLoading] = useState(true)
