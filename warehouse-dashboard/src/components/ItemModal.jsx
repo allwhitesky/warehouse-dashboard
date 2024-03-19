@@ -5,11 +5,8 @@ import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
 
 import { useEffect } from 'react';
+import { supabase } from "../lib/helper/supabaseClient";
 
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://rvnfstjxuiwxvyzhlqmt.supabase.co'
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey)
 
 
 const style = {

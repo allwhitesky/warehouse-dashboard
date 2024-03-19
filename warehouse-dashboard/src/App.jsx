@@ -1,47 +1,63 @@
 import { useState, useEffect } from 'react'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import './App.css'
+import { supabase } from "./lib/helper/supabaseClient";
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
 import ItemModal from './components/ItemModal'
 import ItemsTable from './components/ItemsTable'
 
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://rvnfstjxuiwxvyzhlqmt.supabase.co'
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey)
 
-
-async function getData() {
+async function getInfo() {
   {/*just for testing purposes rn, hard coded item_id*/ }
-  const { data, error } = await supabase
+  const { info, error } = await supabase
     .from('items')
     .select('*')
     .eq('item_id', '2c4bc8b7-8bc6-4b6f-95fa-059c866a869f')
-  return data
+  return info
 
 }
 
-function App() {
-  const [data, setData] = useState(null);
+async function logout() {
+  await supabase.auth.signOut({ scope: 'local'})
+}
+
+export default function App() {
+  const [session, setSession] = useState(null)
+  const [info, setInfo] = useState(null);
   useEffect(() => {
-    getData().then(data => {
-      setData(data);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+    console.log(
+      'session',
+      session
+    )
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    console.log(
+      'session',
+      session
+    )
+    getInfo().then(info => {
+      setInfo(info);
     });
-  }, []);
-  console.log("THIS IS ITEM DATA", data)
-  return (
-    <>
-      <Auth
-        supabaseClient={supabase}
-        appearance={{ theme: ThemeSupa }}
-        providers={['google', 'facebook', 'twitter']}
-        redirectTo='dashboard'
-      />
-      <ItemsTable />
 
-      {data ? <ItemModal data={data[0]} /> : <></>}
-    </>
-  )
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (!session) {
+    return (<Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} providers={['google']} />)
+  }
+  else {
+    return (
+      <>
+        <h1>Authenticated</h1>
+        <button onClick={logout}>Logout</button>
+      </>
+    )
+  }
 }
-
-export default App
