@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import './App.css'
-import SignIn from './components/SignOn'
-import SignUp from './components/SignUp'
 import ItemModal from './components/ItemModal'
+import ItemsTable from './components/ItemsTable'
 
 import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = 'https://rvnfstjxuiwxvyzhlqmt.supabase.co'
@@ -38,6 +37,7 @@ function App() {
         providers={['google', 'facebook', 'twitter']}
         redirectTo='dashboard'
       />
+      <ItemsTable />
 
       {data ? <ItemModal data={data[0]} /> : <></>}
     </>
