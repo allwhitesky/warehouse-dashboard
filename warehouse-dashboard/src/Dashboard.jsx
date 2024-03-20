@@ -10,11 +10,11 @@ export default function Dashboard() {
     const [current_client, setCurrentClient] = useState(null);
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
-            <Sidebar setCurrentProject={setCurrentProject} setCurrentClient={setCurrentClient}/>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh'}}>
                 <NavBar />
-                <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'between', gap: 105 }}> 
+                <Sidebar setCurrentProject={setCurrentProject} setCurrentClient={setCurrentClient}/>
+                <div style={{ flex: 1, overflowY: 'auto'}}>
                     {current_project ? (
                         <ItemsTable current_project={current_project} /> // Render ItemsTable when a project is selected
                     ) : current_client ? (

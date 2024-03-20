@@ -118,10 +118,10 @@ export default function BasicTable({ current_project }) {
     }
   };
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <div style={{ width: '80%', margin: 'auto' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div style={{ width: '80%' }}>
+        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
         <AddItemForm onAddItem={handleAddItem} />
-        <TableContainer component={Paper} sx={{ maxHeight: 1000 }}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
