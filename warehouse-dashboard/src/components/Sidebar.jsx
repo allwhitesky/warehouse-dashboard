@@ -67,7 +67,7 @@ async function getProjectsFromClient(props) {
 }
 
 
-export function ProjectList({ clients, setCurrentProject }) {
+export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
     const [selectedClients, setSelectedClients] = useState([]);
     const [projects, setProjects] = useState([]);
 
@@ -80,8 +80,11 @@ export function ProjectList({ clients, setCurrentProject }) {
             setSelectedClients([...selectedClients, client]);
             const clientProjects = await getProjectsFromClient(client.client_id);
             setProjects(prevProjects => [...prevProjects, ...clientProjects]);
+            setCurrentClient(client.client_id); // Set the current client
         }
     }
+
+
 
     useEffect(() => {
         // Filter out projects related to deselected clients
@@ -95,8 +98,8 @@ export function ProjectList({ clients, setCurrentProject }) {
         <nav>
             <SideNavUl>
                 {clients.map(client => (
-                    <NavItem key={client.client_id}>
-                        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <NavItem onClick={() => setCurrentClient(client.client_id)} key={client.client_id}>
+                        <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                 <PersonIcon style={{ marginRight: '5px' }} fontSize='medium' />
                                 <a style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
@@ -127,7 +130,7 @@ export function ProjectList({ clients, setCurrentProject }) {
 
 
 
-export default function Sidebar({ setCurrentProject }) {
+export default function Sidebar({ setCurrentProject, setCurrentClient }) {
     console.log(setCurrentProject)
     const [projects, setProjects] = useState([]);
     const [clients, setClients] = useState([]);
@@ -145,6 +148,6 @@ export default function Sidebar({ setCurrentProject }) {
     console.log(clients)
     return (
 
-        <ProjectList clients={clients} projects={projects} setCurrentProject={setCurrentProject} />
+        <ProjectList clients={clients} projects={projects} setCurrentProject={setCurrentProject} setCurrentClient={setCurrentClient} />
     )
 }

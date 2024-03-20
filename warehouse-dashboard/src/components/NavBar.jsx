@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import logo from '../images/warehouse.jpg'
 import logout from '../images/logout.png'
 import { supabase } from "../lib/helper/supabaseClient";
-
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 
 
 const NavContainer = styled.div`
@@ -59,7 +59,7 @@ export default function NavBar() {
         <>
             <NavContainer>
                 <Icon>
-                    <img src={logo} alt='Logo' />
+                    <WarehouseIcon sx={{ fontSize: 96 }} style={{color: 'white'}} />
                 </Icon>
                 <Logout onClick={handleLogout}><img src={logout}/></Logout>
             </NavContainer>
