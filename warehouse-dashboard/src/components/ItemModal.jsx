@@ -112,8 +112,6 @@ function ChildModal() {
 
 export default function NestedModal({ projects, data }) {
 
-    console.log("BINK BONK DATA", data.item_id)
-
     const itemNo = data.item_number
     const itemId = data.item_id
 
