@@ -17,12 +17,41 @@ async function getProjects() {
   return projects
 }
 
+const AddItemForm = ({ onAddItem }) => {
+  const [itemName, setItemName] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (itemName.trim()) {
+      await onAddItem(itemName);
+      setItemName('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        id="item_name"
+        name="item_name"
+        value={itemName}
+        onChange={(e) => setItemName(e.target.value)}
+        placeholder="Enter new item name"
+      />
+      <button type="submit">Add Item</button>
+    </form>
+  );
+};
+
+
+
 export default function BasicTable({ current_project }) {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [projects, setProjects] = useState([{}])
   const [updatedItems, setUpdatedItems] = useState(null);
   const [deletedItem, setDeletedItem] = useState(null);
+  const [addedItem, setAddedItem] = useState(null);
 
   useEffect(() => {
     getProjects().then(data => {
@@ -31,7 +60,7 @@ export default function BasicTable({ current_project }) {
   }, []);
 
   useEffect(() => {
-    console.log("HERE IN THE UPDATE ITEMS")
+    //console.log("HERE IN THE UPDATE ITEMS")
     if (updatedItems) {
       setItems(prevItems => {
         const updatedItemsMap = new Map(updatedItems.map(item => [item.item_id, item]));
@@ -41,7 +70,7 @@ export default function BasicTable({ current_project }) {
   }, [updatedItems]);
 
   useEffect(() => {
-    console.log("HERE IN THE DELETE ITEMS")
+    //console.log("HERE IN THE DELETE ITEMS")
     if (deletedItem) {
       setItems(prevItems => prevItems.filter(item => item.item_id !== deletedItem));
     }
@@ -72,10 +101,26 @@ export default function BasicTable({ current_project }) {
   if (loading) {
     return <div>Loading...</div>
   }
+  const handleAddItem = async (itemName) => {
+    try {
+      const { data, error } = await supabase
+        .from('items')
+        .insert([{ item_name: itemName, project_id: current_project }])
+        .select();
 
+      if (error) {
+        console.error('Error adding item:', error.message);
+      } else {
+        setItems((prevItems) => [...prevItems, ...data]);
+      }
+    } catch (error) {
+      console.error('Error adding item:', error.message);
+    }
+  };
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       <div style={{ width: '80%', margin: 'auto' }}>
+        <AddItemForm onAddItem={handleAddItem} />
         <TableContainer component={Paper} sx={{ maxHeight: 1000 }}>
           <Table aria-label="simple table">
             <TableHead>
@@ -106,7 +151,7 @@ export default function BasicTable({ current_project }) {
             </TableHead>
             <TableBody>
               {items.map((item) => (
-                console.log('item photo', item.photos),
+                //console.log('item photo', item.photos),
                 <TableRow key={item.item_id}>
                   <TableCell>
                     <NestedModal projects={projects} data={item} setUpdatedItems={setUpdatedItems} setDeletedItems={setDeletedItem} />
