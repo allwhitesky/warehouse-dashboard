@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import logo from '../images/download.png'
+import logo from '../images/warehouse.jpg'
 import logout from '../images/logout.png'
 import { supabase } from "../lib/helper/supabaseClient";
 
@@ -9,7 +9,7 @@ import { supabase } from "../lib/helper/supabaseClient";
 const NavContainer = styled.div`
     width: 100%;
     height: 100px;
-    background-color: #ffffff;
+    background-color: #1a1a1a;
     display: flex;
     flex-direction: row;
 
@@ -37,10 +37,11 @@ const Logout = styled.div`
     border-radius: 50%;
     width: 50px;
     height: 50px;
-
+    background-color: white;
     img {
         width: 30px;
         height: 30px;
+        background-color: white;
     }
     :hover {
         cursor: pointer;

@@ -3,7 +3,8 @@ import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useParams, useRouteError } from "react-router-dom"
-
+import PersonIcon from '@mui/icons-material/Person';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 import { supabase } from '../lib/helper/supabaseClient';
 
 const AddProjectButton = styled.button`
@@ -18,7 +19,7 @@ const AddProjectButton = styled.button`
 const NavItem = styled.li`
     padding-left: 0;
     text-align: left;
-    margin: 0px;
+    margin: 10px;
 `
 
 const SideNavUl = styled.ul`
@@ -28,12 +29,19 @@ const SideNavUl = styled.ul`
     width: 250px;
     padding-left: 10px;
     height: 100%;
-    margin-top: 105px;
-    background: #343a40;
+    margin-top: 100px;
+    background:  #1a1a1a;
     box-sizing: border-box;
     border-top: 1px solid black;
     list-style-type: none;
+    color: white;
 `
+
+const ClientIconImg = styled.img`
+    height: 25px;
+    width: 25px;
+`
+
 async function getProjects() {
     let { data: projects, error } = await supabase
         .from('projects')
@@ -60,68 +68,62 @@ async function getProjectsFromClient(props) {
 
 
 export function ProjectList({ clients, setCurrentProject }) {
-
+    const [selectedClients, setSelectedClients] = useState([]);
     const [projects, setProjects] = useState([]);
-    const [isProjectListOpen, setIsProjectListOpen] = useState(false)
-    const [isClientListOpen, setIsClientListOpen] = useState(false)
 
-
-
-
-    function handleClientClick(client) {
-        console.log(getProjectsFromClient(client))
-        getProjectsFromClient(client).then(data => { setProjects(data) })
+    async function handleClientClick(client) {
+        if (selectedClients.includes(client)) {
+            setSelectedClients(selectedClients.filter(c => c !== client));
+            // Clear projects related to deselected client
+            setProjects(prevProjects => prevProjects.filter(project => project.client_id !== client.client_id));
+        } else {
+            setSelectedClients([...selectedClients, client]);
+            const clientProjects = await getProjectsFromClient(client.client_id);
+            setProjects(prevProjects => [...prevProjects, ...clientProjects]);
+        }
     }
 
-
-
+    useEffect(() => {
+        // Filter out projects related to deselected clients
+        const filteredProjects = projects.filter(project =>
+            selectedClients.some(client => client.client_id === project.client_id)
+        );
+        setProjects(filteredProjects);
+    }, [selectedClients]);
 
     return (
-        <>
-            <nav>
-                <div>
-                    <SideNavUl>
-                        <NavItem>
-                            <a>My Dashboard</a>
-                        </NavItem>
-                        <NavItem>
-                            <a onClick={() => setIsClientListOpen(!isClientListOpen)}>My clients
-                                <span style={{ float: 'right', paddingRight: '10px' }}>{isClientListOpen ? '-' : '+'}</span>
-                            </a>
-                            {isClientListOpen && (
-                                <ul style={{ paddingLeft: '20px' }}>
-                                    {clients.map(client => (
-                                        <NavItem key={client.client_id}>
-                                            {/* <NavLink to={project}>{project.project_name}</NavLink> */}
-                                            <a onClick={() => { handleClientClick(client.client_id) }}>{client.client_name}</a>
-                                        </NavItem>
-                                    ))}
-                                </ul>
+        <nav>
+            <SideNavUl>
+                {clients.map(client => (
+                    <NavItem key={client.client_id}>
+                        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <PersonIcon style={{ marginRight: '5px' }} fontSize='medium' />
+                                <a style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
+                                    {client.client_name}
+                                </a>
+                            </div>
+                            {selectedClients.includes(client) && (
+                                <div style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column' }}>
+                                    {projects
+                                        .filter(project => project.client_id === client.client_id)
+                                        .map(project => (
+                                            <div key={project.project_id} style={{ display: 'flex', alignItems: 'center', margin: '5px' }}>
+                                                <ApartmentIcon style={{ marginRight: '5px' }} fontSize='small' />
+                                                <a onClick={() => setCurrentProject(project.project_id)}>
+                                                    {project.project_name}
+                                                </a>
+                                            </div>
+                                        ))}
+                                </div>
                             )}
-                        </NavItem>
-                        <NavItem>
-                            <a onClick={() => setIsProjectListOpen(!isProjectListOpen)}>My projects
-                                <span style={{ float: 'right', paddingRight: '10px' }}>{isProjectListOpen ? '-' : '+'}</span>
-                            </a>
-                            {isProjectListOpen && (
-                                <ul style={{ paddingLeft: '20px' }}>
-                                    {projects.map(project => (
-                                        <NavItem key={project.project_id}>
-                                            {/* <NavLink to={project}>{project.project_name}</NavLink> */}
-                                            <a onClick={() => setCurrentProject(project.project_id)}>{project.project_name}</a>
-                                        </NavItem>
-                                    ))}
-                                </ul>
-                            )}
-                        </NavItem>
-                    </SideNavUl>
-                </div>
-            </nav>
-        </>
-    )
+                        </div>
+                    </NavItem>
+                ))}
+            </SideNavUl>
+        </nav>
+    );
 }
-
-
 
 
 

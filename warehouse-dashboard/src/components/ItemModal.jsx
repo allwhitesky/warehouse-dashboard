@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
-
+import EditIcon from '@mui/icons-material/Edit';
 import { useEffect } from 'react';
 import { supabase } from "../lib/helper/supabaseClient";
 
@@ -189,7 +189,7 @@ export default function NestedModal({ projects, data }) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
+            <Button style={{color: 'black', textDecoration: 'none'}} onClick={handleOpen}><EditIcon /></Button>
             <Modal
                 open={open}
                 onClose={handleClose}
