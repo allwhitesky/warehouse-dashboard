@@ -17,9 +17,7 @@ async function getInfo() {
 
 }
 
-async function logout() {
-  await supabase.auth.signOut({ scope: 'local'})
-}
+
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -65,7 +63,6 @@ export default function App() {
     return (
       <>
         <Dashboard />
-        <button onClick={logout}>Logout</button>
       </>
     )
   }
