@@ -59,7 +59,7 @@ async function getProjectsFromClient(props) {
 }
 
 
-export function ProjectList({ clients }) {
+export function ProjectList({ clients, setCurrentProject }) {
 
     const [projects, setProjects] = useState([]);
     const [isProjectListOpen, setIsProjectListOpen] = useState(false)
@@ -108,7 +108,7 @@ export function ProjectList({ clients }) {
                                     {projects.map(project => (
                                         <NavItem key={project.project_id}>
                                             {/* <NavLink to={project}>{project.project_name}</NavLink> */}
-                                            <a>{project.project_name}</a>
+                                            <a onClick={() => setCurrentProject(project.project_id)}>{project.project_name}</a>
                                         </NavItem>
                                     ))}
                                 </ul>
@@ -125,7 +125,8 @@ export function ProjectList({ clients }) {
 
 
 
-export default function Sidebar() {
+export default function Sidebar({ setCurrentProject }) {
+    console.log(setCurrentProject)
     const [projects, setProjects] = useState([]);
     const [clients, setClients] = useState([]);
 
@@ -142,6 +143,6 @@ export default function Sidebar() {
     console.log(clients)
     return (
 
-        <ProjectList clients={clients} projects={projects} />
+        <ProjectList clients={clients} projects={projects} setCurrentProject={setCurrentProject} />
     )
 }

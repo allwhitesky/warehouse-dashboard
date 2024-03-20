@@ -7,14 +7,14 @@ import ItemTable from './components/ItemsTable'
 
 export default function Dashboard() {
 
-
+    const [current_project, setCurrentProject] = useState(null);
 
 
     return (
         <>
             <NavBar />
-
-            <Sidebar />
+            <Sidebar setCurrentProject={setCurrentProject} />
+            {current_project ? <ItemTable current_project={current_project} /> : <div>NOTHING HERE</div>}
         </>
     )
 }
