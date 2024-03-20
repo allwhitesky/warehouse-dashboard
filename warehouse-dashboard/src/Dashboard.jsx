@@ -9,21 +9,29 @@ export default function Dashboard() {
     const [current_project, setCurrentProject] = useState(null);
     const [current_client, setCurrentClient] = useState(null);
 
+    useEffect(() => {
+        setCurrentProject(null);
+    }, [current_client]);
+
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh'}}>
-                <NavBar />
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'between', gap: 105 }}> 
-                <Sidebar setCurrentProject={setCurrentProject} setCurrentClient={setCurrentClient}/>
-                <div style={{ flex: 1, overflowY: 'auto'}}>
-                    {current_project ? (
-                        <ItemsTable current_project={current_project} /> // Render ItemsTable when a project is selected
-                    ) : current_client ? (
-                        <ProjectsTable clientId={current_client} /> // Render ProjectsTable when a client is selected
-                    ) : (
-                        <ClientsTable setCurrentClient={setCurrentClient} /> // Render ClientsTable by default
-                    )}
+        <>
+            <NavBar />
+            <div style={{ height: '100vh', overflowY: 'auto' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginTop: '20px', justifyContent: 'space-between' }}>
+                    <div style={{ flex: '0 0 auto', width: '250px', height: '100vh', overflowY: 'auto'  }}>
+                        <Sidebar style={{}} setCurrentProject={setCurrentProject} setCurrentClient={setCurrentClient} />
+                    </div>
+                    <div style={{ flex: '1 1 auto', overflowY: 'auto' }}>
+                        {current_project ? (
+                            <ItemsTable current_project={current_project} />
+                        ) : current_client ? (
+                            <ProjectsTable clientId={current_client} />
+                        ) : (
+                            <ClientsTable setCurrentClient={setCurrentClient} />
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

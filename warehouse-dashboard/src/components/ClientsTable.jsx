@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
 import { supabase } from '../lib/helper/supabaseClient'
+import AddClientForm from './AddClientForm'
 
 export default function BasicTable() {
   const [loading, setLoading] = useState(true)
@@ -40,8 +41,9 @@ export default function BasicTable() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
     <div style={{ width: '80%', margin: 'auto'}}>
+    <AddClientForm />
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Client ID</TableCell>

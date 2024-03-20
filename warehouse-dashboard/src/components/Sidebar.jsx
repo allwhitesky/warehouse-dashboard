@@ -28,13 +28,14 @@ const SideNavUl = styled.ul`
     left: 0;
     width: 250px;
     padding-left: 10px;
-    height: 100%;
+    height: 100vh;
     margin-top: 100px;
     background:  #1a1a1a;
     box-sizing: border-box;
     border-top: 1px solid black;
     list-style-type: none;
     color: white;
+    overflow-y: auto; /* Enable vertical scrolling */
 `
 
 const ClientIconImg = styled.img`
