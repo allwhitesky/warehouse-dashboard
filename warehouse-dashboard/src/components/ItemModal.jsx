@@ -110,10 +110,9 @@ function ChildModal() {
     );
 }
 
-export default function NestedModal({ data }) {
+export default function NestedModal({ projects, data }) {
 
     console.log("BINK BONK DATA", data.item_id)
-    const [projects, setProjects] = React.useState([{}])
 
     const itemNo = data.item_number
     const itemId = data.item_id
@@ -129,16 +128,6 @@ export default function NestedModal({ data }) {
     const [location, setLocation] = React.useState(data.location)
     const [notes, setNotes] = React.useState("")
     const [damageNotes, setDamageNotes] = React.useState("")
-
-
-    useEffect(() => {
-        getProjects().then(data => {
-            setProjects(data);
-        });
-    }, []);
-
-    console.log("PROJECTS", projects)
-
 
 
     const [images, setImages] = React.useState(data.photos || []);

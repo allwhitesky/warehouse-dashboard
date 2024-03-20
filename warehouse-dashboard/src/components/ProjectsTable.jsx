@@ -53,6 +53,8 @@ export default function BasicTable({ clientId }) {
   }
 
   return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+    <div style={{ width: '80%', margin: 'auto'}}>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -73,5 +75,7 @@ export default function BasicTable({ clientId }) {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
+    </div>
   )
 }
