@@ -27,8 +27,8 @@ const SideNavUl = styled.ul`
     left: 0;
     width: 250px;
     padding-left: 10px;
-    height: calc(100vh - 3.5rem);
-    margin-top: 3.5rem;
+    height: 100%;
+    margin-top: 105px;
     background: #343a40;
     box-sizing: border-box;
     border-top: 1px solid black;
