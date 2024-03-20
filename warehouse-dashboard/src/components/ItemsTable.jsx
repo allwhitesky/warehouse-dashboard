@@ -21,12 +21,31 @@ export default function BasicTable({ current_project }) {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [projects, setProjects] = useState([{}])
+  const [updatedItems, setUpdatedItems] = useState(null);
+  const [deletedItem, setDeletedItem] = useState(null);
 
   useEffect(() => {
     getProjects().then(data => {
       setProjects(data);
     });
   }, []);
+
+  useEffect(() => {
+    console.log("HERE IN THE UPDATE ITEMS")
+    if (updatedItems) {
+      setItems(prevItems => {
+        const updatedItemsMap = new Map(updatedItems.map(item => [item.item_id, item]));
+        return prevItems.map(item => updatedItemsMap.get(item.item_id) || item);
+      });
+    }
+  }, [updatedItems]);
+
+  useEffect(() => {
+    console.log("HERE IN THE DELETE ITEMS")
+    if (deletedItem) {
+      setItems(prevItems => prevItems.filter(item => item.item_id !== deletedItem));
+    }
+  }, [deletedItem]);
 
   useEffect(() => {
     async function fetchItems() {
@@ -90,7 +109,7 @@ export default function BasicTable({ current_project }) {
                 console.log('item photo', item.photos),
                 <TableRow key={item.item_id}>
                   <TableCell>
-                    <NestedModal projects={projects} data={item} />
+                    <NestedModal projects={projects} data={item} setUpdatedItems={setUpdatedItems} setDeletedItems={setDeletedItem} />
                   </TableCell>
                   <TableCell component="th" scope="row">{item.item_id}</TableCell>
                   <TableCell>{item.item_name || ''}</TableCell>

@@ -75,8 +75,7 @@ async function updateData(props) {
         })
         .eq('item_id', props.itemId)
         .select();
-    return data, error
-
+    return data
 }
 
 function ChildModal() {
@@ -110,7 +109,7 @@ function ChildModal() {
     );
 }
 
-export default function NestedModal({ projects, data }) {
+export default function NestedModal({ projects, data, setUpdatedItems, setDeletedItems }) {
 
     const itemNo = data.item_number
     const itemId = data.item_id
@@ -147,13 +146,14 @@ export default function NestedModal({ projects, data }) {
 
     const handleDelete = () => {
         deleteItem(itemId).then(data => console.log(data))
+        setDeletedItems(itemId)
         setOpen(false)
     }
 
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        updateData({ itemId, condition, itemName, recievedDate, manufacturer, inspectedDate, project, location, images, freight }).then(data => console.log(data))
+        updateData({ itemId, condition, itemName, recievedDate, manufacturer, inspectedDate, project, location, images, freight }).then(data => { console.log("DATA HERE", data); setUpdatedItems(data) })
         handleClose()
     }
 
@@ -187,7 +187,7 @@ export default function NestedModal({ projects, data }) {
 
     return (
         <div>
-            <Button style={{color: 'black', textDecoration: 'none'}} onClick={handleOpen}><EditIcon /></Button>
+            <Button style={{ color: 'black', textDecoration: 'none' }} onClick={handleOpen}><EditIcon /></Button>
             <Modal
                 open={open}
                 onClose={handleClose}
