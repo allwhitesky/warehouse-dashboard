@@ -13,6 +13,7 @@ export default function Dashboard () {
         <>
             <NavBar/>
             
+            <Sidebar />
         </>
     )
 }

@@ -4,8 +4,11 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import ItemModal from './components/ItemModal'
 import ItemsTable from './components/ItemsTable'
-import Dashboard from './Dashboard';
+import ClientsTable from './components/ClientsTable'
+import Sidebar from './components/Sidebar';
+import ProjectsTable from './components/ProjectsTable';
 
+const client_Id = '096eac8f-bc2a-4328-8087-5656d78c7f92'
 
 async function getInfo() {
   {/*just for testing purposes rn, hard coded item_id*/ }
@@ -62,7 +65,13 @@ export default function App() {
   else {
     return (
       <>
+<<<<<<< HEAD
         <Dashboard />
+=======
+        
+        <Sidebar />
+        <button onClick={logout}>Logout</button>
+>>>>>>> 3d1ddefc3623d328c95d6c3e49cc4cd478868d2f
       </>
     )
   }
