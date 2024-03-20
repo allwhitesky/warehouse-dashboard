@@ -60,6 +60,8 @@ async function getData() {
 async function updateData(props) {
     console.log("UPDATE DATA", props)
     console.log("UPDATE DATA", props.images)
+
+
     const { data, error } = await supabase
         .from('items')
         .update({
@@ -75,6 +77,7 @@ async function updateData(props) {
         })
         .eq('item_id', props.itemId)
         .select();
+
     return data
 }
 
@@ -113,6 +116,8 @@ export default function NestedModal({ projects, data, setUpdatedItems, setDelete
 
     const itemNo = data.item_number
     const itemId = data.item_id
+
+    const orignialProject = data.project_id
 
     const [itemName, setItemName] = React.useState(data.item_name)
 
@@ -153,7 +158,7 @@ export default function NestedModal({ projects, data, setUpdatedItems, setDelete
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        updateData({ itemId, condition, itemName, recievedDate, manufacturer, inspectedDate, project, location, images, freight }).then(data => { console.log("DATA HERE", data); setUpdatedItems(data) })
+        updateData({ itemId, condition, itemName, recievedDate, manufacturer, inspectedDate, project, location, images, freight, orignialProject }).then(data => { if (orignialProject != project) { setDeletedItems(itemId) } else { setUpdatedItems(data) } })
         handleClose()
     }
 
