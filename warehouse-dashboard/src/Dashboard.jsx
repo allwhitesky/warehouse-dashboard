@@ -11,10 +11,14 @@ export default function Dashboard() {
 
 
     return (
-        <>
-            <NavBar />
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
             <Sidebar setCurrentProject={setCurrentProject} />
-            {current_project ? <ItemTable current_project={current_project} /> : <div>NOTHING HERE</div>}
-        </>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <NavBar />
+                <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+                    {current_project ? <ItemTable current_project={current_project} /> : <div>NOTHING HERE</div>}
+                </div>
+            </div>
+        </div>
     )
 }
