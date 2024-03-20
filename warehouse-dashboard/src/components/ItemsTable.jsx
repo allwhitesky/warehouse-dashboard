@@ -18,7 +18,6 @@ async function getProjects() {
 }
 
 export default function BasicTable({ current_project }) {
-  console.log('ItemsTable')
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [projects, setProjects] = useState([{}])
@@ -88,6 +87,7 @@ export default function BasicTable({ current_project }) {
             </TableHead>
             <TableBody>
               {items.map((item) => (
+                console.log('item photo', item.photos),
                 <TableRow key={item.item_id}>
                   <TableCell>
                     <NestedModal projects={projects} data={item} />
@@ -124,10 +124,10 @@ export default function BasicTable({ current_project }) {
 }
 
 function renderPhotos(photos) {
-  if (!photos) return '';
+  if (!photos) return [];
 
   try {
-    if (typeof photos === 'string') {
+    if (photos != []) {
       return (
         <Card>
           <CardMedia
@@ -143,6 +143,6 @@ function renderPhotos(photos) {
     }
   } catch (error) {
     console.error('Error rendering photos:', error.message);
-    return '';
+    return [];
   }
 }
