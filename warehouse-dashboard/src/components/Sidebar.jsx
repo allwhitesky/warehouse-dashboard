@@ -102,9 +102,9 @@ export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
                         <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                 <PersonIcon style={{ marginRight: '5px' }} fontSize='medium' />
-                                <a style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
+                                <NavLink to={`/clients/${client.client_name}`} style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
                                     {client.client_name}
-                                </a>
+                                </NavLink>
                             </div>
                             {selectedClients.includes(client) && (
                                 <div style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -113,9 +113,9 @@ export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
                                         .map(project => (
                                             <div key={project.project_id} style={{ display: 'flex', alignItems: 'center', margin: '5px' }}>
                                                 <ApartmentIcon style={{ marginRight: '5px' }} fontSize='small' />
-                                                <a onClick={() => setCurrentProject(project.project_id)}>
+                                                <NavLink to={`/projects/${project.project_name}`} onClick={() => setCurrentProject(project.project_id)}>
                                                     {project.project_name}
-                                                </a>
+                                                </NavLink>
                                             </div>
                                         ))}
                                 </div>
@@ -144,7 +144,13 @@ export default function Sidebar({ setCurrentProject, setCurrentClient }) {
         getClients().then(data => {
             setClients(data)
         })
-    }, [])
+        return () => {  // Clear data when route changes to "/"
+            setProjects([]);
+            setClients([]);
+            setCurrentProject(null);
+            setCurrentClient(null);
+        };
+    }, [setCurrentProject, setCurrentClient]);
     console.log(clients)
     return (
 
