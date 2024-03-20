@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
-import { NavLink, Outlet, useParams,useRouteError } from "react-router-dom"
+import { NavLink, Outlet, useParams, useRouteError } from "react-router-dom"
 
 import { supabase } from '../lib/helper/supabaseClient';
 
@@ -41,11 +41,41 @@ async function getProjects() {
     return projects
 }
 
+async function getClients() {
+    let { data: clients, error } = await supabase
+        .from('clients')
+        .select('*')
+    return clients
+}
 
 
-export function ProjectList({projects}){
-    console.log('projects', projects)
+async function getProjectsFromClient(props) {
+    console.log("HERE", props)
+    let { data: projects, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('client_id', props)
+    return projects
+}
+
+
+export function ProjectList({ clients }) {
+
+    const [projects, setProjects] = useState([]);
     const [isProjectListOpen, setIsProjectListOpen] = useState(false)
+    const [isClientListOpen, setIsClientListOpen] = useState(false)
+
+
+
+
+    function handleClientClick(client) {
+        console.log(getProjectsFromClient(client))
+        getProjectsFromClient(client).then(data => { setProjects(data) })
+    }
+
+
+
+
     return (
         <>
             <nav>
@@ -55,8 +85,23 @@ export function ProjectList({projects}){
                             <a>My Dashboard</a>
                         </NavItem>
                         <NavItem>
+                            <a onClick={() => setIsClientListOpen(!isClientListOpen)}>My clients
+                                <span style={{ float: 'right', paddingRight: '10px' }}>{isClientListOpen ? '-' : '+'}</span>
+                            </a>
+                            {isClientListOpen && (
+                                <ul style={{ paddingLeft: '20px' }}>
+                                    {clients.map(client => (
+                                        <NavItem key={client.client_id}>
+                                            {/* <NavLink to={project}>{project.project_name}</NavLink> */}
+                                            <a onClick={() => { handleClientClick(client.client_id) }}>{client.client_name}</a>
+                                        </NavItem>
+                                    ))}
+                                </ul>
+                            )}
+                        </NavItem>
+                        <NavItem>
                             <a onClick={() => setIsProjectListOpen(!isProjectListOpen)}>My projects
-                            <span style={{float : 'right',  paddingRight: '10px'}}>{isProjectListOpen ? '-' : '+'}</span>
+                                <span style={{ float: 'right', paddingRight: '10px' }}>{isProjectListOpen ? '-' : '+'}</span>
                             </a>
                             {isProjectListOpen && (
                                 <ul style={{ paddingLeft: '20px' }}>
@@ -69,9 +114,6 @@ export function ProjectList({projects}){
                                 </ul>
                             )}
                         </NavItem>
-                        <NavItem>
-                            <a>Setting</a>
-                        </NavItem>
                     </SideNavUl>
                 </div>
             </nav>
@@ -79,16 +121,27 @@ export function ProjectList({projects}){
     )
 }
 
-export default function Sidebar(){    
-    const [projects, setProjects] = useState([]);
-    useEffect(() => {
-    getProjects().then(data => {
-        setProjects(data)
-    })
-    }, [])
 
+
+
+
+export default function Sidebar() {
+    const [projects, setProjects] = useState([]);
+    const [clients, setClients] = useState([]);
+
+
+
+    useEffect(() => {
+        getProjects().then(data => {
+            setProjects(data)
+        })
+        getClients().then(data => {
+            setClients(data)
+        })
+    }, [])
+    console.log(clients)
     return (
 
-        <ProjectList projects={projects}/>
+        <ProjectList clients={clients} projects={projects} />
     )
 }

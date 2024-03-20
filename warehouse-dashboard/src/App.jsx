@@ -22,7 +22,7 @@ async function getInfo() {
 export default function App() {
   const [session, setSession] = useState(null)
   const [info, setInfo] = useState(null);
- 
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -31,13 +31,13 @@ export default function App() {
         'session',
         session
       )
-     
+
       console.log(
         'userEmail',
         session.user.email
       )
     })
-   
+
 
     const {
       data: { subscription },
