@@ -147,7 +147,7 @@ export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
                                 backgroundColor: selectedClient === client.client_id ? '#333333' : 'initial'
                                 }}>
                                 <PersonIcon style={{ marginRight: '5px' }} fontSize='medium' />
-                                <a style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
+                                <NavLink to={`/clients/${client.client_name}`} style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
                                     {client.client_name}
                                 </a>
                             </NavClient>
@@ -198,7 +198,13 @@ export default function Sidebar({ setCurrentProject, setCurrentClient }) {
         getClients().then(data => {
             setClients(data)
         })
-    }, [])
+        return () => {  // Clear data when route changes to "/"
+            setProjects([]);
+            setClients([]);
+            setCurrentProject(null);
+            setCurrentClient(null);
+        };
+    }, [setCurrentProject, setCurrentClient]);
     console.log(clients)
     return (
 
