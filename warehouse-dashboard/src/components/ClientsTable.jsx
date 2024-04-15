@@ -41,7 +41,6 @@ export default function BasicTable() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
     <div style={{ width: '80%', margin: 'auto'}}>
-    <AddClientForm />
     <TableContainer component={Paper}>
       <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -62,6 +61,7 @@ export default function BasicTable() {
         </TableBody>
       </Table>
     </TableContainer>
+    <AddClientForm />
     </div>
     </div>
   )

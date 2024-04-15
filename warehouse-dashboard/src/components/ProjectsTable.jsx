@@ -50,12 +50,15 @@ export default function BasicTable({ clientId }) {
             client_name: clientData.client_name
           };
         }));
+        
 
         setProjects(projectsWithNames);
 
         if (projectsWithNames.length > 0) {
           // Extract keys from the first object to use as table headings
-          const cols = Object.keys(projectsWithNames[0]).map(formatColumnName);
+          const cols = Object.keys(projectsWithNames[0])
+            .filter(key => !key.includes('id')) // Filter out columns containing 'id'
+            .map(formatColumnName);
           setColumns(cols);
         }
         setLoading(false);
@@ -85,16 +88,13 @@ export default function BasicTable({ clientId }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       <div style={{ width: '80%', margin: 'auto' }}>
-        <AddProjectForm />
         <TableContainer component={Paper}>
           <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
               {columns.map((column, index) => (
                 // Check if the column name contains 'id', and if so, skip rendering it
-                !column.toLowerCase().includes('id') && (
                   <TableCell key={index}>{column}</TableCell>
-                )
               ))}
               </TableRow>
             </TableHead>
@@ -114,6 +114,7 @@ export default function BasicTable({ clientId }) {
             </TableBody>
           </Table>
         </TableContainer>
+        <AddProjectForm clientId={clientId}/>
       </div>
     </div>
   );

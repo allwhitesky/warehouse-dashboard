@@ -15,11 +15,43 @@ const AddProjectButton = styled.button`
     padding: 2px;
     font-size: 11px;
     border: black solid thin;
+
+    
 `
 const NavItem = styled.li`
     padding-left: 0;
     text-align: left;
     margin: 10px;
+    padding: 5px;
+    :hover{
+        cursor: pointer;
+        border: 0px solid #333333;
+        border-radius: 6px;
+        background-color: #333333;
+    }
+`
+
+const NavClient = styled.div`
+    width: 200px;
+    padding: 5px;
+    border-radius: 6px;
+    :hover{
+        cursor: pointer;
+        border: 0px solid #333333;
+        border-radius: 6px;
+        background-color: #333333;
+    }
+`
+const NavProject = styled.div`
+    width: 150px;
+    padding: 5px;
+    border-radius: 6px;
+    :hover{
+        cursor: pointer;
+        border: 0px solid #333333;
+        border-radius: 6px;
+        background-color: #333333;
+    }
 `
 
 const SideNavUl = styled.ul`
@@ -70,6 +102,8 @@ async function getProjectsFromClient(props) {
 
 export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
     const [selectedClients, setSelectedClients] = useState([]);
+    const [selectedClient, setSelectedClient] = useState(null);
+    const [selectedProject, setSelectedProject] = useState(null);
     const [projects, setProjects] = useState([]);
 
     async function handleClientClick(client) {
@@ -82,7 +116,9 @@ export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
             const clientProjects = await getProjectsFromClient(client.client_id);
             setProjects(prevProjects => [...prevProjects, ...clientProjects]);
             setCurrentClient(client.client_id); // Set the current client
+            setSelectedClient(client.client_id)
         }
+        setSelectedProject(null)
     }
 
 
@@ -100,24 +136,41 @@ export function ProjectList({ clients, setCurrentProject, setCurrentClient }) {
             <SideNavUl>
                 {clients.map(client => (
                     <NavItem onClick={() => setCurrentClient(client.client_id)} key={client.client_id}>
-                        <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div style={{ 
+                            alignItems: 'flex-start',
+                            display: 'flex', 
+                            flexDirection: 'column' }}>
+                            <NavClient style={{ 
+                                display: 'flex', 
+                                flexDirection: 'row', 
+                                alignItems: 'center',
+                                backgroundColor: selectedClient === client.client_id ? '#333333' : 'initial'
+                                }}>
                                 <PersonIcon style={{ marginRight: '5px' }} fontSize='medium' />
                                 <a style={{ margin: '5px' }} onClick={() => handleClientClick(client)}>
                                     {client.client_name}
                                 </a>
-                            </div>
+                            </NavClient>
                             {selectedClients.includes(client) && (
                                 <div style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column' }}>
                                     {projects
                                         .filter(project => project.client_id === client.client_id)
                                         .map(project => (
-                                            <div key={project.project_id} style={{ display: 'flex', alignItems: 'center', margin: '5px' }}>
+                                            <NavProject key={project.project_id} style={{ 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                margin: '5px',
+                                                backgroundColor: selectedProject === project.project_id ? '#333333' : 'initial', // Change background color based on selected project 
+                                                }}>
                                                 <ApartmentIcon style={{ marginRight: '5px' }} fontSize='small' />
-                                                <a onClick={() => setCurrentProject(project.project_id)}>
+                                                <a onClick={() => {
+                                                        setCurrentProject(project.project_id);
+                                                        setSelectedProject(project.project_id); // Set the selected project
+                                                    }}
+                                                >
                                                     {project.project_name}
                                                 </a>
-                                            </div>
+                                            </NavProject>
                                         ))}
                                 </div>
                             )}
